@@ -1,11 +1,62 @@
-@import 'tailwindcss';
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* Light theme */
+body.light {
+  --bg-color: #ffffff;
+  --text-color: #222222;
+  --primary-color: #007bff;
+  --btn-primary-bg: var(--primary-color);
+  --btn-primary-color: #fff;
+  --alert-success-bg: #d4edda;
+  --alert-success-text: #155724;
+  --alert-info-bg: #cce5ff;
+  --alert-info-text: #004085;
+  --toggle-bg: #6c757d; /* grey background for toggle in light mode */
+  --toggle-color: #ffffff; /* white icon */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* Dark theme */
+body.dark {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --primary-color: #80bdff;
+  --btn-primary-bg: var(--primary-color);
+  --btn-primary-color: #000;
+  --alert-success-bg: #155724;
+  --alert-success-text: #d4edda;
+  --alert-info-bg: #004085;
+  --alert-info-text: #cce5ff;
+  --toggle-bg: #ffc107; /* yellow background for toggle in dark mode */
+  --toggle-color: #000000; /* black icon */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Bootstrap overrides to use CSS vars */
+.btn-primary {
+  background-color: var(--btn-primary-bg) !important;
+  color: var(--btn-primary-color) !important;
+  border-color: var(--btn-primary-bg) !important;
+}
+
+/* Alerts */
+.alert-success {
+  background-color: var(--alert-success-bg) !important;
+  color: var(--alert-success-text) !important;
+}
+
+.alert-info {
+  background-color: var(--alert-info-bg) !important;
+  color: var(--alert-info-text) !important;
+}
+
+/* Container styling */
+.container {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh; /* full viewport height for pages */
 }
