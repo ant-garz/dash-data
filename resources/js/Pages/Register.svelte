@@ -140,6 +140,7 @@
                                 {/if}
                             </Button>
                         </form>
+                        <p>Returning user? Please <a href="/login">log in</a></p>
                     </CardBody>
                 </Card>
             </Col>

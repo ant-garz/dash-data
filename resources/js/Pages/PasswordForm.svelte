@@ -14,14 +14,14 @@
         Row,
         Col,
     } from "@sveltestrap/sveltestrap";
-    import { updatePassword } from "../user"
+    import { updatePassword } from "../user";
     import { theme } from "../stores/theme";
 
     $: currentTheme = $theme;
 
     let current_password = "";
     let new_password = "";
-    let confirm_password = "";
+    let new_password_confirmation = "";
     let error = "";
     let success = "";
 
@@ -29,17 +29,27 @@
         e.preventDefault();
         error = success = "";
 
-        if (new_password !== confirm_password) {
+        if (new_password !== new_password_confirmation) {
             error = "Passwords do not match.";
             return;
         }
 
         try {
-            await updatePassword({ current_password, new_password });
+            await updatePassword({
+                current_password,
+                new_password,
+                new_password_confirmation,
+            });
             success = "Password updated successfully.";
-            current_password = new_password = confirm_password = "";
+            current_password = new_password = new_password_confirmation = "";
         } catch (e) {
-            error = "Failed to update password.";
+            if (e?.response?.data?.errors?.current_password) {
+                error = e.response.data.errors.current_password[0];
+            } else if (e?.response?.data?.errors?.new_password) {
+                error = e.response.data.errors.new_password[0];
+            } else {
+                error = "Failed to update password.";
+            }
         }
     }
 </script>
@@ -63,21 +73,44 @@
 
                         <form on:submit={handleSubmit}>
                             <FormGroup>
-                                <Label for="current_password">Current Password</Label>
-                                <Input id="current_password" type="password" bind:value={current_password} required />
+                                <Label for="current_password"
+                                    >Current Password</Label
+                                >
+                                <Input
+                                    id="current_password"
+                                    type="password"
+                                    bind:value={current_password}
+                                    required
+                                />
                             </FormGroup>
 
                             <FormGroup>
                                 <Label for="new_password">New Password</Label>
-                                <Input id="new_password" type="password" bind:value={new_password} required />
+                                <Input
+                                    id="new_password"
+                                    type="password"
+                                    bind:value={new_password}
+                                    required
+                                />
                             </FormGroup>
 
                             <FormGroup>
-                                <Label for="confirm_password">Confirm New Password</Label>
-                                <Input id="confirm_password" type="password" bind:value={confirm_password} required />
+                                <Label for="new_password_confirmation"
+                                    >Confirm New Password</Label
+                                >
+                                <Input
+                                    id="new_password_confirmation"
+                                    type="password"
+                                    bind:value={new_password_confirmation}
+                                    required
+                                />
                             </FormGroup>
 
-                            <Button color="primary" class="w-100 mt-3" type="submit">
+                            <Button
+                                color="primary"
+                                class="w-100 mt-3"
+                                type="submit"
+                            >
                                 Update Password
                             </Button>
                         </form>

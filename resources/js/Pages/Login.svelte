@@ -77,6 +77,7 @@
                                 type="submit">Login</Button
                             >
                         </form>
+                        <p>Don't have an account? Please <a href="/register">register</a> here</p>
                     </CardBody>
                 </Card>
             </Col>

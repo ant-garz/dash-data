@@ -1,5 +1,5 @@
 import api from './api';
-
+import { fetchUser } from "./auth"
 /**
  * Update user profile (name, email, etc.)
  * @param {Object} data - { name: string, email: string }
@@ -7,6 +7,8 @@ import api from './api';
 export async function updateUser(data) {
 	try {
 		const response = await api.put('/api/user', data);
+
+		await fetchUser();
 		return response.data;
 	} catch (error) {
 		handleApiError(error);
@@ -15,7 +17,7 @@ export async function updateUser(data) {
 
 /**
  * Update user password
- * @param {Object} data - { current_password, new_password }
+ * @param {Object} data - { current_password, new_password, new_password_confirmation }
  */
 export async function updatePassword(data) {
 	try {
