@@ -42,9 +42,7 @@
     >
         <Row class="w-100 justify-content-center">
             <Col sm="12" md="6" lg="4">
-                <Card
-                    theme={currentTheme === "dark" ? "dark" : "light"}
-                >
+                <Card theme={currentTheme === "dark" ? "dark" : "light"}>
                     <CardBody>
                         <CardTitle tag="h4" class="mb-4 text-center"
                             >Login</CardTitle

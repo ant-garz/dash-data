@@ -15,9 +15,14 @@
         Button,
         NavbarToggler,
         Collapse,
+        Dropdown,
+        DropdownItem,
+        DropdownToggle,
+        DropdownMenu,
     } from "@sveltestrap/sveltestrap";
 
     let isOpen = false;
+    let isProfileDropDownOpen = false;
     let screenWidth = 0;
     $: isMobile = screenWidth < 768;
 
@@ -42,7 +47,12 @@
     }
 
     onMount(() => {
-        if (!$auth.user) fetchUser();
+        const hasLoggedIn = localStorage.getItem("hasLoggedIn") === "true";
+
+        // Only fetch user if we know they’ve logged in before and $auth.user is null
+        if (hasLoggedIn && !$auth?.user) {
+            fetchUser();
+        }
         updatePath();
 
         updateScreenWidth();
@@ -74,9 +84,33 @@
             <Nav navbar class="flex-column">
                 {#if $auth.user}
                     <NavItem>
-                        <span class="navbar-text text-white mb-2"
-                            >Hi, {$auth.user.name}</span
+                        <Dropdown
+                            nav
+                            inNavbar
+                            isOpen={isProfileDropDownOpen}
+                            toggle={() =>
+                                (isProfileDropDownOpen =
+                                    !isProfileDropDownOpen)}
                         >
+                            <DropdownToggle nav caret>
+                                {$auth?.user.name}
+                            </DropdownToggle>
+                            <DropdownMenu end>
+                                <DropdownItem href="/profile"
+                                    >Profile</DropdownItem
+                                >
+                                <DropdownItem href="/profile/edit"
+                                    >Edit Profile</DropdownItem
+                                >
+                                <DropdownItem href="/profile/password"
+                                    >Change Password</DropdownItem
+                                >
+                                <DropdownItem divider />
+                                <DropdownItem on:click={logout}
+                                    >Logout</DropdownItem
+                                >
+                            </DropdownMenu>
+                        </Dropdown>
                     </NavItem>
                     <NavItem>
                         <Button color="outline-light" on:click={handleLogout}
@@ -117,13 +151,23 @@
         <Nav class="ms-auto d-flex align-items-center" navbar>
             {#if $auth.user}
                 <NavItem class="me-3">
-                    <span class="navbar-text text-white">{$auth.user.name}</span
+                    <Dropdown
+                        nav
+                        inNavbar
+                        isOpen={isProfileDropDownOpen}
+                        toggle={() =>
+                            (isProfileDropDownOpen = !isProfileDropDownOpen)}
                     >
-                </NavItem>
-                <NavItem>
-                    <Button color="outline-light" on:click={handleLogout}
-                        >Logout</Button
-                    >
+                        <DropdownToggle nav caret>
+                            {$auth?.user.name}
+                        </DropdownToggle>
+                        <DropdownMenu end>
+                            <DropdownItem href="/profile">Profile</DropdownItem>
+                            <DropdownItem divider />
+                            <DropdownItem on:click={logout}>Logout</DropdownItem
+                            >
+                        </DropdownMenu>
+                    </Dropdown>
                 </NavItem>
             {:else}
                 {#if $path !== "/login"}

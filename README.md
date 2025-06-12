@@ -25,7 +25,6 @@ This project is developed using HTTP for local development and testing purposes 
 If deploying this project publicly, ensure the following:
 
 - Use **HTTPS** with a valid SSL certificate to prevent token leakage and man-in-the-middle attacks.
-- Set `SANCTUM_STATEFUL_DOMAINS` and `SESSION_DOMAIN` appropriately if switching to cookie-based auth.
 - Ensure proper CORS configuration and CSRF protection for stateful apps.
 - Secure `.env` files and database credentials before deploying.
 

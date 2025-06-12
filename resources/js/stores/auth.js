@@ -6,4 +6,5 @@ export const auth = writable({
 
 export function clearAuth() {
   auth.set({ user: null });
+  localStorage.removeItem("hasLoggedIn");
 }

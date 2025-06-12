@@ -14,7 +14,7 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         // ✅ Log the user in using session (CSRF-based)
         Auth::login($user);
-
+        $request->session()->regenerate();
         return response()->json([
             'message' => 'User registered and logged in.',
         ], 201);
@@ -58,10 +58,5 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return response()->json(['message' => 'Logged out successfully.']);
-    }
-
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
     }
 }
