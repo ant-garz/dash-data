@@ -18,4 +18,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     // Videos
     Route::get('/videos', [VideoController::class, 'index']);
     Route::get('/videos/{video}', [VideoController::class, 'show']);
+
+    Route::get('/user', function (\Illuminate\Http\Request $request) {
+        return $request->user();
+    });
 });

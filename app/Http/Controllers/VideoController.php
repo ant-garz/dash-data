@@ -38,15 +38,9 @@ class VideoController extends Controller
         // Enforce ownership via VideoPolicy::view()
         $this->authorize('view', $video);
 
-        return $video;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        // Eager load related segments
+        $video->load('segments'); // assuming a `segments()` relationship is defined
+       return response()->json($video);
     }
 
     /**
@@ -87,19 +81,17 @@ class VideoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Video $video)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateVideoRequest $request, Video $video)
     {
         //
+        $this->authorize('update', $video);
+
+         // Authorization is automatically handled by authorizeResource()
+        $video->update($request->validated());
+
+        return response()->json(['message' => 'Video updated successfully.']);
     }
 
     /**
@@ -108,5 +100,11 @@ class VideoController extends Controller
     public function destroy(Video $video)
     {
         //
+        $this->authorize('delete', $video);
+
+        // Authorization is automatically handled by authorizeResource()
+        $video->delete();
+
+        return response()->json(['message' => 'Video deleted successfully.']);
     }
 }

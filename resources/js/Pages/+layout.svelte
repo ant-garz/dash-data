@@ -99,11 +99,8 @@
                                 <DropdownItem href="/profile"
                                     >Profile</DropdownItem
                                 >
-                                <DropdownItem href="/profile/edit"
-                                    >Edit Profile</DropdownItem
-                                >
-                                <DropdownItem href="/profile/password"
-                                    >Change Password</DropdownItem
+                                <DropdownItem href="/videos"
+                                    >Videos</DropdownItem
                                 >
                                 <DropdownItem divider />
                                 <DropdownItem on:click={logout}
@@ -163,6 +160,7 @@
                         </DropdownToggle>
                         <DropdownMenu end>
                             <DropdownItem href="/profile">Profile</DropdownItem>
+                            <DropdownItem href="/videos">Videos</DropdownItem>
                             <DropdownItem divider />
                             <DropdownItem on:click={logout}>Logout</DropdownItem
                             >

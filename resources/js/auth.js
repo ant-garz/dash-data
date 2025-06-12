@@ -3,7 +3,7 @@ import { auth, clearAuth } from "./stores/auth";
 
 export async function fetchUser() {
     try {
-        const response = await api.get("/user");
+        const response = await api.get("/api/user");
         auth.set({ user: response.data });
     } catch (error) {
         console.error("Fetch user failed:", error?.response?.status);

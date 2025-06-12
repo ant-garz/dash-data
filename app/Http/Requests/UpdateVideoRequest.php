@@ -22,8 +22,16 @@ class UpdateVideoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'sometimes|nullable|string|max:255',
-            'recorded_at' => 'sometimes|nullable|date',
+            'title' => ['nullable', 'string', 'max:255'],
+            'recorded_at' => ['nullable', 'date'],
+
+            // These may or may not be editable by users — adjust accordingly
+            'codec' => ['nullable', 'string', 'max:50'],
+            'format' => ['nullable', 'string', 'max:10'],
+            'duration' => ['nullable', 'integer', 'min:1'],
+            'width' => ['nullable', 'integer', 'min:1'],
+            'height' => ['nullable', 'integer', 'min:1'],
+            'size' => ['nullable', 'integer', 'min:1'],
         ];
     }
 }

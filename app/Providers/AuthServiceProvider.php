@@ -8,10 +8,8 @@ class AuthServiceProvider extends ServiceProvider
 {
 
     protected $policies = [
-        // The model class to the policy class
-        'App\Models\Video' => 'App\Policies\VideoPolicy',
+        \App\Models\Video::class => \App\Policies\VideoPolicy::class,
     ];
-
 
     /**
      * Register services.

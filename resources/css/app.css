@@ -56,3 +56,67 @@ body.dark {
   color: var(--text-color);
   min-height: 100vh; /* full viewport height for pages */
 }
+
+
+/* Light theme table styles */
+body.light table,
+body.light table.table {
+  background-color: #fff;
+  color: #222;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+body.light table th,
+body.light table td,
+body.light table.table th,
+body.light table.table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: left;
+  background-color: transparent; /* reset bootstrap background */
+  color: inherit;
+}
+
+body.light table th,
+body.light table.table th {
+  background-color: #f8f9fa;
+  color: #222;
+}
+
+/* Dark theme table styles */
+body.dark table,
+body.dark table.table {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+body.dark table th,
+body.dark table td,
+body.dark table.table th,
+body.dark table.table td {
+  border: 1px solid #2c2c2c;
+  padding: 0.75rem;
+  text-align: left;
+  background-color: transparent; /* override bootstrap bg */
+  color: #e0e0e0;
+}
+
+/* Make the header background match nav bar color */
+body.dark table th,
+body.dark table.table th {
+  background-color: #121a29; /* match your navbar bg */
+  color: #80bdff; /* or use var(--primary-color) if you want */
+}
+
+/* Optional striped rows in dark mode */
+body.dark table.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #222831;
+}
+
+/* Optional hover effect in dark mode */
+body.dark table.table-hover tbody tr:hover {
+  background-color: #2a3a5d;
+}

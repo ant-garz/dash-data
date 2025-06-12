@@ -31,12 +31,22 @@ Route::get('/profile/edit/password', function () {
     return Inertia::render('PasswordForm');
 });
 
+Route::get('/videos', function () {
+    return Inertia::render('Videos');
+});
 
+Route::get('/videos/{id}', function (string $id) {
+    return Inertia::render('Video', [
+        'id' => $id
+    ]);
+});
+
+Route::get('/videos/{id}/edit', function (string $id) {
+    return Inertia::render('VideoEditor', [
+        'id' => $id
+    ]);
+});
 
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:login');
 Route::post('/logout', [AuthController::class, 'logout']);
-
-Route::get('/user', function (\Illuminate\Http\Request $request) {
-    return $request->user();
-});
