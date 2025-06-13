@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('videos', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary(); // UUID
 
             $table->string('title')->nullable();
             // File path or storage URI
             $table->string('filename');
 
             // Foreign key to the authenticated user
-            $table->unsignedBigInteger('user_id');
+            $table->uuid('user_id'); // FK is also UUID
             $table->foreign('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
 
             // Video metadata

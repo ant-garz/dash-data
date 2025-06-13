@@ -52,7 +52,7 @@
                             <ul class="list-unstyled mb-4">
                                 <li>
                                     <strong>Duration:</strong>
-                                    {video.duration}s
+                                    {video.duration_readable}
                                 </li>
                                 <li><strong>Format:</strong> {video.format}</li>
                                 <li><strong>Codec:</strong> {video.codec}</li>

@@ -8,9 +8,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('video_segments', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary(); // UUID
 
-            $table->unsignedBigInteger('video_id');
+            $table->uuid('video_id');
             $table->foreign('video_id')->references('id')->on('videos')->constrained()->onDelete('cascade');
 
             $table->string('filename'); // path to the segment file

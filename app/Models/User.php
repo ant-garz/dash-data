@@ -5,11 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
+    protected $primaryKey = 'id'; // Only if you're still using the 'id' column but it's a UUID
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
+
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +62,11 @@ class User extends Authenticatable
 
     public function videos()
     {
-        return $this->hasMany(Video::class);
+        return $this->hasMany(Video::class, 'user_id', 'id');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'id'; // Still UUID, but string-based
     }
 }
