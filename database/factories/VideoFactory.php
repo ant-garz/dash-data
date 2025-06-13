@@ -26,6 +26,7 @@ class VideoFactory extends Factory
 
         return [
             'title' => $this->faker->sentence,
+            'description' => $this->faker->sentence,
             'filename' => 'temp/' . $this->faker->randomNumber(2) . '/' . Str::random(10) . ".$format",
             'user_id' => User::factory(), // auto-create related user unless overridden
             'codec' => $this->faker->randomElement(['H.264', 'H.265']),

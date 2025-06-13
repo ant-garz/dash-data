@@ -1,142 +1,176 @@
 <script>
-	import Layout from "./+layout.svelte";
-	import {
-		Card,
-		CardBody,
-		CardTitle,
-		FormGroup,
-		Label,
-		Input,
-		Button,
-		Alert,
-		Container,
-		Row,
-		Col,
-	} from "@sveltestrap/sveltestrap";
-	import { theme } from "../stores/theme";
-	import api from "../api"
-	import { onMount } from "svelte";
+    import Layout from "./+layout.svelte";
+    import { onMount } from "svelte";
+    import {
+        Container,
+        Row,
+        Col,
+        Card,
+        CardBody,
+        Table,
+        Spinner,
+    } from "@sveltestrap/sveltestrap";
+    import api from "../api";
 
-	$: currentTheme = $theme;
+    import { theme } from "../stores/theme.js";
 
-    export let id; // prop from laravel
-	let title = "";
-	let codec = "";
-	let format = "";
-	let duration = "";
-	let width = "";
-	let height = "";
-	let size = "";
-	let recorded_at = "";
+    $: currentTheme = $theme;
 
-	let error = "";
-	let success = "";
+    export let id; // video id from route param
 
-	// Parse video ID from current URL (e.g. /videos/123/edit)
-	onMount(async () => {
+    let video = null;
+    let error = "";
+    let success = "";
 
+    let selectedFiles = [];
+    let uploading = false;
+    let uploadProgress = 0;
 
-		try {
-			const res = await api.get(`/api/videos/${id}`);
-			const video = res.data;
-			title = video.title || "";
-			codec = video.codec;
-			format = video.format;
-			duration = video.duration;
-			width = video.width;
-			height = video.height;
-			size = video.size;
-			recorded_at = video.recorded_at;
-		} catch (err) {
-			error = "Failed to load video data.";
-		}
-	});
+    onMount(async () => {
+        error = "";
+        try {
+            const res = await api.get(`/api/videos/${id}`);
+            video = res.data;
+        } catch (err) {
+            error = "Failed to load video information.";
+        }
+    });
 
-	async function handleSubmit(e) {
-		e.preventDefault();
-		error = success = "";
+    function handleFileChange(event) {
+        selectedFiles = Array.from(event.target.files);
+    }
 
-		try {
-			await api.put(`/api/videos/${id}`, {
-				title,
-				codec,
-				format,
-				duration,
-				width,
-				height,
-				size,
-				recorded_at,
-			});
-			success = "Video updated successfully.";
-		} catch (err) {
-			error = "Failed to update video.";
-		}
-	}
+    async function handleUpload(e) {
+        e.preventDefault();
+        error = "";
+        success = "";
+
+        if (selectedFiles.length === 0) {
+            error = "Please select one or more segment files to upload.";
+            return;
+        }
+
+        const formData = new FormData();
+        // Include video title if needed (optional)
+        formData.append("title", video.title);
+
+        selectedFiles.forEach((file) => {
+            formData.append("segments[]", file);
+        });
+
+        uploading = true;
+        uploadProgress = 0;
+
+        try {
+            await api.post(`/api/videos/${id}/segments`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                onUploadProgress: (progressEvent) => {
+                    if (progressEvent.lengthComputable) {
+                        uploadProgress = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total,
+                        );
+                    }
+                },
+            });
+            success = "Segments uploaded successfully!";
+            selectedFiles = [];
+        } catch (err) {
+            error = "Upload failed. Please try again.";
+        } finally {
+            uploading = false;
+            uploadProgress = 0;
+        }
+    }
+
+    async function handleCancel() {
+        if (!confirm("Cancel upload and delete this video?")) return;
+
+        try {
+            await api.delete(`/api/videos/${id}/cancel`);
+            success = "Upload canceled and video deleted.";
+            // Optionally redirect user, e.g. window.location.href = "/videos";
+        } catch {
+            error = "Failed to cancel upload.";
+        }
+    }
 </script>
 
 <Layout>
-	<Container class="py-5">
-		<Row class="justify-content-center">
-			<Col sm="12" md="8" lg="6">
-				<Card theme={currentTheme === "dark" ? "dark" : "light"}>
-					<CardBody>
-						<CardTitle tag="h4" class="mb-4 text-center">Edit Video</CardTitle>
+    <Container class="py-5">
+        {#if loading}
+            <Spinner color="primary" />
+        {:else if error}
+            <p class="text-danger">{error}</p>
+        {:else}
+            <Row class="justify-content-center">
+                <Col md="10" lg="8">
+                    <Card theme={currentTheme === "dark" ? "dark" : "light"}>
+                        <CardBody>
+                            <h3 class="mb-3">{video.title}</h3>
 
-						{#if error}
-							<Alert color="danger">{error}</Alert>
-						{/if}
-						{#if success}
-							<Alert color="success">{success}</Alert>
-						{/if}
+                            <!-- Main stitched video -->
+                            <video
+                                src={`/storage/${video.filename}`}
+                                controls
+                                class="w-100 mb-4"
+                            ></video>
 
-						<form on:submit={handleSubmit}>
-							<FormGroup>
-								<Label for="title">Title</Label>
-								<Input id="title" bind:value={title} required />
-							</FormGroup>
+                            <ul class="list-unstyled mb-4">
+                                <li>
+                                    <strong>Duration:</strong>
+                                    {video.duration_readable}
+                                </li>
+                                <li><strong>Format:</strong> {video.format}</li>
+                                <li><strong>Codec:</strong> {video.codec}</li>
+                                <li>
+                                    <strong>Size:</strong>
+                                    {(video.size / 1048576).toFixed(1)} MB
+                                </li>
+                                <li>
+                                    <strong>Resolution:</strong>
+                                    {video.width}×{video.height}
+                                </li>
+                                <li>
+                                    <strong>Recorded At:</strong>
+                                    {video.recorded_at}
+                                </li>
+                            </ul>
 
-							<FormGroup>
-								<Label for="codec">Codec</Label>
-								<Input id="codec" value={codec} disabled />
-							</FormGroup>
-
-							<FormGroup>
-								<Label for="format">Format</Label>
-								<Input id="format" value={format} disabled />
-							</FormGroup>
-
-							<FormGroup>
-								<Label for="duration">Duration (sec)</Label>
-								<Input id="duration" type="number" value={duration} disabled />
-							</FormGroup>
-
-							<FormGroup>
-								<Label for="dimensions">Resolution</Label>
-								<Input id="dimensions" value={`${width} × ${height}`} disabled />
-							</FormGroup>
-
-							<FormGroup>
-								<Label for="size">File Size (bytes)</Label>
-								<Input id="size" type="number" value={size} disabled />
-							</FormGroup>
-
-							<FormGroup>
-								<Label for="recorded_at">Recorded At</Label>
-								<Input
-									id="recorded_at"
-									type="datetime-local"
-									value={recorded_at?.slice(0, 16)}
-									disabled
-								/>
-							</FormGroup>
-
-							<Button color="primary" class="w-100 mt-3" type="submit">
-								Save Changes
-							</Button>
-						</form>
-					</CardBody>
-				</Card>
-			</Col>
-		</Row>
-	</Container>
+                            {#if video.segments?.length}
+                                <h5 class="mt-4">📂 Segments</h5>
+                                <Table striped responsive class="mt-2">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Filename</th>
+                                            <th>Duration</th>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {#each video.segments as seg, i}
+                                            <tr>
+                                                <td>{i + 1}</td>
+                                                <td>{seg.filename}</td>
+                                                <td>{seg.duration ?? "—"}s</td>
+                                                <td>{seg.start_time ?? "—"}</td>
+                                                <td>{seg.end_time ?? "—"}</td>
+                                            </tr>
+                                        {/each}
+                                    </tbody>
+                                </Table>
+                            {:else}
+                                <p class="text-muted">
+                                    No segments found for this video.
+                                </p>
+                            {/if}
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+        {/if}
+    </Container>
 </Layout>

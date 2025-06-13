@@ -23,8 +23,6 @@ class StoreVideoRequest extends FormRequest
     {
         return [
             'title' => 'nullable|string|max:255',
-            'video' => 'required|file|max:102400', // max 100MB (adjust as needed)
-            'recorded_at' => 'nullable|date',
         ];
     }
 }

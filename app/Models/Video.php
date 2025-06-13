@@ -14,7 +14,7 @@ class Video extends Model
 
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $primaryKey = 'id'; // Only if you're still using the 'id' column but it's a UUID
+    protected $primaryKey = 'id';
 
     // Ensure 'duration_readable' is included in serialization
     protected $appends = ['duration_readable'];

@@ -1,7 +1,14 @@
 <script>
     import Layout from "./+layout.svelte";
     import { onMount } from "svelte";
-    import { Table, Container, Spinner } from "@sveltestrap/sveltestrap";
+    import {
+        Table,
+        Container,
+        Spinner,
+        Button,
+        Row,
+        Col,
+    } from "@sveltestrap/sveltestrap";
     import api from "../api";
 
     let videos = [];
@@ -28,15 +35,34 @@
     <Container class="py-5">
         <h2 class="mb-4">
             <p style="font-size:100px">&#127909;</p>
-             Your Videos
+            Your Videos
         </h2>
+        <Button
+            color="success"
+            class="my-3"
+            on:click={() => (window.location.href = "/videos/create")}
+        >
+            +
+        </Button>
 
         {#if loading}
-            <Spinner color="primary" />
+            <Row>
+                <Col>
+                    <Spinner color="primary" />
+                </Col>
+            </Row>
         {:else if error}
-            <p class="text-danger">{error}</p>
+            <Row>
+                <Col>
+                    <p class="text-danger">{error}</p>
+                </Col>
+            </Row>
         {:else if videos.length === 0}
-            <p>No videos found.</p>
+            <Row>
+                <Col>
+                    <p>No videos found.</p>
+                </Col>
+            </Row>
         {:else}
             <Table hover responsive>
                 <thead>

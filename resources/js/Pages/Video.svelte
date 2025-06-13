@@ -12,6 +12,10 @@
     } from "@sveltestrap/sveltestrap";
     import api from "../api";
 
+    import { theme } from "../stores/theme.js";
+
+    $: currentTheme = $theme;
+
     let video = null;
     let loading = true;
     let error = "";
@@ -38,7 +42,7 @@
         {:else}
             <Row class="justify-content-center">
                 <Col md="10" lg="8">
-                    <Card>
+                    <Card theme={currentTheme === "dark" ? "dark" : "light"}>
                         <CardBody>
                             <h3 class="mb-3">{video.title}</h3>
 

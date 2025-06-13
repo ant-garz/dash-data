@@ -12,27 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('videos', function (Blueprint $table) {
-            $table->uuid('id')->primary(); // UUID
+            $table->uuid('id')->primary();
 
-            $table->string('title')->nullable();
-            // File path or storage URI
-            $table->string('filename');
+            $table->string('title');             // required
+            $table->text('description');         // required
 
-            // Foreign key to the authenticated user
-            $table->uuid('user_id'); // FK is also UUID
-            $table->foreign('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
+            $table->string('filename')->nullable();
 
-            // Video metadata
-            $table->string('codec')->nullable();              // e.g., "H.264", "H.265"
-            $table->string('format')->nullable();          // e.g., "mp4", "mov", "avi"
-            $table->unsignedInteger('duration')->nullable();  // in seconds
-            $table->unsignedInteger('width')->nullable();     // resolution
+            $table->uuid('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->string('codec')->nullable();
+            $table->string('format')->nullable();
+            $table->unsignedInteger('duration')->nullable();
+            $table->unsignedInteger('width')->nullable();
             $table->unsignedInteger('height')->nullable();
-            $table->unsignedBigInteger('size')->nullable();   // in bytes
+            $table->unsignedBigInteger('size')->nullable();
 
-            // Timestamps
-            $table->timestamp('recorded_at')->nullable();     // from dashcam metadata
-            $table->timestamps();                             // created_at, updated_at
+            $table->timestamp('recorded_at')->nullable();
+            $table->timestamps();
         });
     }
 
