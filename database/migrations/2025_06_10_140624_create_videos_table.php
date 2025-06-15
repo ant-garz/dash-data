@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('videos', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->string('title');             // required
-            $table->text('description');         // required
+            $table->string('title'); // required at creation
+            $table->text('description')->nullable(); // required at creation
 
             $table->string('filename')->nullable();
 

@@ -50,18 +50,14 @@ class VideoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'recorded_at' => 'nullable|date',
+            'description' => 'required|string',
         ]);
 
         $user = $request->user();
 
-        $video = $user->videos()->create([
-            'title' => $request->title,
-            'recorded_at' => $request->recorded_at,
-            'filename' => '', // will update after stitching
-        ]);
+        $video = $user->videos()->create($validated);
 
         return response()->json($video, 201);
     }

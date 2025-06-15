@@ -50,7 +50,7 @@
             const res = await api.post("/api/videos", { title, description });
             success = "Video created! Redirecting to upload...";
             const videoId = res.data.id;
-            window.location.href = `/videos/${videoId}/upload-segments`;
+            window.location.href = `/videos/${videoId}/edit`;
         } catch (err) {
             error = "Failed to create video. Please try again.";
         } finally {

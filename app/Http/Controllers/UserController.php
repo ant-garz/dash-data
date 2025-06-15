@@ -58,12 +58,12 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $request->user()->id,
         ]);
 
-        $request->user()->update($request->only(['name', 'email']));
+        $request->user()->update($validated);
         return response()->json(['message' => 'Profile updated']);
     }
     /**
@@ -77,7 +77,7 @@ class UserController extends Controller
     public function updatePassword(Request $request)
     {
         // Step 1: Validate input
-        $request->validate([
+        $validated = $request->validate([
             'current_password' => ['required'],
             'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -85,14 +85,14 @@ class UserController extends Controller
         $user = $request->user();
 
         // Step 2: Check if current password is correct
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (!Hash::check($validated["current_password"], $validated["password"])) {
             throw ValidationException::withMessages([
                 'current_password' => ['The current password is incorrect.'],
             ]);
         }
 
         // Step 3: Update password
-        $user->password = Hash::make($request->new_password);
+        $user->password = Hash::make($validated["new_password"]);
         $user->save();
 
         return response()->json(['message' => 'Password updated successfully.']);

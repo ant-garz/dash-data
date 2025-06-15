@@ -9,6 +9,7 @@
         CardBody,
         Table,
         Spinner,
+        Button
     } from "@sveltestrap/sveltestrap";
     import api from "../api";
 
@@ -31,6 +32,10 @@
             loading = false;
         }
     });
+
+    function edit(){
+        window.location.href="/videos/" + video.id + "/edit"
+    }
 </script>
 
 <Layout>
@@ -44,14 +49,24 @@
                 <Col md="10" lg="8">
                     <Card theme={currentTheme === "dark" ? "dark" : "light"}>
                         <CardBody>
-                            <h3 class="mb-3">{video.title}</h3>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="mb-0">{video.title}</h3>
+                                <Button color="primary" on:click={edit}>Edit</Button>
+                            </div>
 
                             <!-- Main stitched video -->
-                            <video
-                                src={`/storage/${video.filename}`}
-                                controls
-                                class="w-100 mb-4"
-                            ></video>
+                            {#if video.segments?.length > 0}
+                                <video
+                                    src={`/storage/${video.filename}`}
+                                    controls
+                                    class="w-100 mb-4"
+                                >
+                                    <track kind="captions" />
+                                </video>
+                            {:else}
+                                <p class="text-muted mb-4">No stitched video available yet.</p>
+                            {/if}
+
 
                             <ul class="list-unstyled mb-4">
                                 <li>

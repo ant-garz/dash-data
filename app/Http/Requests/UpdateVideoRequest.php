@@ -22,9 +22,10 @@ class UpdateVideoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['nullable', 'string', 'max:255'],
-            'recorded_at' => ['nullable', 'date'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => 'required|string',
 
+            'recorded_at' => ['nullable', 'date'],
             // These may or may not be editable by users — adjust accordingly
             'codec' => ['nullable', 'string', 'max:50'],
             'format' => ['nullable', 'string', 'max:10'],
