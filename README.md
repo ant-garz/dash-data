@@ -1,8 +1,8 @@
-# 🚗 dash-data
+# dash-data
 
 A web-based application for working with **dash cam video footage** and associated data.
 
-## ✨ Features
+## Features
 
 - Convert or change **video codecs** to suit different playback or archival needs.
 - Upload and **stitch together multiple video clips** (e.g., 2-minute dash cam segments into a continuous 1-hour drive).
@@ -11,7 +11,7 @@ A web-based application for working with **dash cam video footage** and associat
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
 **Frontend:**
 - [Svelte](https://svelte.dev/)
@@ -30,7 +30,7 @@ A web-based application for working with **dash cam video footage** and associat
 
 ---
 
-## 📦 Development Setup
+## Development Setup
 
 ```bash
 # 1. Clone the repository
