@@ -19,7 +19,7 @@
     >
         <Row class="justify-content-center w-100">
             <Col md="10" lg="8">
-                <h1 class="mb-4">🎥 Dash Data</h1>
+                <h1 class="mb-4">Dash Data</h1>
 
                 <p class="lead">
                     A tool for managing and processing your <strong
@@ -31,11 +31,11 @@
                 <hr class="my-4" />
 
                 <ul class="text-start mx-auto" style="max-width: 600px;">
-                    <li>🔄 Convert video codecs for playback or compression</li>
+                    <li>Convert video codecs for playback or compression</li>
                     <li>
-                        📹 Stitch multiple dash cam clips into a single video
+                        Stitch multiple dash cam clips into a single video
                     </li>
-                    <li>🧩 Organize and review your footage with ease</li>
+                    <li>Organize and review your footage with ease</li>
                 </ul>
 
                 <hr class="my-4" />

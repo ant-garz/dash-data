@@ -34,7 +34,6 @@
 <Layout>
     <Container class="py-5">
         <h2 class="mb-4">
-            <p style="font-size:100px">&#127909;</p>
             Your Videos
         </h2>
         <Button
